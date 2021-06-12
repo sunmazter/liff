@@ -73,7 +73,7 @@
 
     async function scanCode() {
       const result = await liff.scanCode()
-      document.getElementById("scanCode").append(result.value)
+      document.getElementById("btnscanCode").append(result.value)
     }
 
     function openWindow() {
@@ -151,11 +151,17 @@
     async function main() {
       //alert("LINE Developers x Skooldio")
       await liff.init({ liffId: "1656094793-K4x1E6l1" })
-      getEnvironment()
-      getUserProfile()
-      getContext()
-      getFriendship()
-      createUniversalLink()
+      document.getElementById("isLoggedIn").append(liff.isLoggedIn())
+
+      if (liff.isLoggedIn()) {
+          getEnvironment()
+          getUserProfile()
+          getContext()
+          getFriendship()
+          createUniversalLink()
+        } else {
+          liff.login()
+        }
     }
     main()
   </script>
