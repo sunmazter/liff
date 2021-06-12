@@ -72,8 +72,15 @@
     }
 
     async function scanCode() {
-      const result = await liff.scanCode()
-      document.getElementById("scanCode").append(result.value)
+      if(liff.scanCode)
+      {
+        const result = await liff.scanCode()
+        document.getElementById("scanCode").append(result.value)
+      }
+      else{
+        alert("scanCode is unavailable")
+      }
+      
     }
 
     function openWindow() {
