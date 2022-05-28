@@ -41,11 +41,13 @@
     var vConsole = new VConsole()
     console.log("Hello World!")
   </script> -->
+  <p id="scanCode2"><b>Code:</b> </p>
   <div id="qr-reader" style="width: 600px"></div>
   <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
   <script>
     function onScanSuccess(decodedText, decodedResult) {
       console.log(`Code scanned = ${decodedText}`, decodedResult);
+      document.getElementById("scanCode2").append(decodedText)
     }
     var html5QrcodeScanner = new Html5QrcodeScanner(
       "qr-reader", { fps: 10, qrbox: 250 });
