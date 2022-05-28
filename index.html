@@ -42,32 +42,43 @@
     console.log("Hello World!")
   </script> -->
   <p id="scanCode2"><b>Code:</b> </p>
-  <div id="qr-reader" style="width: 300px"></div>
+  <div id="qr-reader" style="width: 300px; display: block;"></div>
+  <p><button id="startScanner" onclick="startScanner()">Start</button></p>
   <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
   <script>
     var html5Qrcode = new Html5Qrcode("qr-reader");
     const config = { fps: 10, qrbox: {width: 250, height: 250} };
-
+    
     function onScanSuccess(decodedText, decodedResult) {
       // Handle on success condition with the decoded text or result.
       console.log(`Scan result: ${decodedText} |Format Name: ${decodedResult.result.format.formatName}`, decodedResult);
       document.getElementById("scanCode2").innerHTML = `<b>Code:</b> ${decodedText} | <b>format:</b> ${decodedResult.result.format.formatName}`;
       // ...
-      html5Qrcode.clear();
+      html5Qrcode.stop().then(ignore=>{
+        document.getElementById("startScanner").style.display = "block";
+        document.getElementById("qr-reader").style.display = "none";
+      });
       // ^ this will stop the scanner (video feed) and clear the scan area.
     }
-    Html5Qrcode.getCameras().then(devices => {
+
+    startScanner();
+    
+    
+
+    function startScanner(){
+      Html5Qrcode.getCameras().then(devices => {
       var cameraId = devices[0].id;
       if(devices && devices.length == 2) {
         cameraId = devices[1].id;
       }
       html5Qrcode.start(cameraId, config, onScanSuccess);
+      document.getElementById("startScanner").style.display = "none";
+      document.getElementById("qr-reader").style.display = "block";
     }).catch(err => {
       // handle err
     });
-    
-
-    
+      
+    }
 
 
 
