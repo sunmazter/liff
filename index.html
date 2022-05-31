@@ -41,9 +41,24 @@
     var vConsole = new VConsole()
     console.log("Hello World!")
   </script> -->
+  <style>
+    #qr-shaded-region {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: none;
+    }
+  </style>
+  
   <p id="scanCode2"><b>Code:</b> </p>
   <div id="qr-reader" style="width: 300px; display: block;"></div>
   <p><button id="startScanner" onclick="startScanner()">Start</button></p>
+  
+  <div id="test-reader" style="width: 300px; display: block;"></div>
   <script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
   <script>
     var html5Qrcode = new Html5Qrcode("qr-reader");
@@ -61,27 +76,31 @@
       // ^ this will stop the scanner (video feed) and clear the scan area.
     }
 
-    // startScanner();
-    
-    
-
     function startScanner(){
       Html5Qrcode.getCameras().then(devices => {
-      var cameraId = devices[0].id;
-      if(devices && devices.length == 2) {
-        cameraId = devices[1].id;
-      }
-      html5Qrcode.start(cameraId, config, onScanSuccess);
-      document.getElementById("startScanner").style.display = "none";
-      document.getElementById("qr-reader").style.display = "block";
-    }).catch(err => {
-      // handle err
-    });
-      
+        var cameraId = devices[0].id;
+        if(devices && devices.length == 2) {
+          cameraId = devices[1].id;
+        }
+        html5Qrcode.start(cameraId, config, onScanSuccess);
+        document.getElementById("startScanner").style.display = "none";
+        document.getElementById("qr-reader").style.display = "block";
+      }).catch(err => {
+        // handle err
+      });
+    
     }
+    // startScanner();
+    function onScanSuccess(decodedText, decodedResult) {
+      // Handle on success condition with the decoded text or result.
+      console.log(`Scan result: ${decodedText} |Format Name: ${decodedResult.result.format.formatName}`, decodedResult);
+      document.getElementById("scanCode2").innerHTML = `<b>Code:</b> ${decodedText} | <b>format:</b> ${decodedResult.result.format.formatName}`;
 
-
-
+      // ^ this will stop the scanner (video feed) and clear the scan area.
+    }
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+      "test-reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
   </script>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
